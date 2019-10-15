@@ -13,26 +13,14 @@ use CTG\Exceptions\CannotAccessAwsException;
 trait CognitoTokenGenerator
 {
     /**
-     * @var Cognito
-     */
-    protected $cognito;
-
-    /**
-     * CognitoTokenGenerator constructor.
-     */
-    public function __construct()
-    {
-        $this->cognito = Cognito::getInstance();
-    }
-
-    /**
-     * @param string $email
-     * @param string $password
      * @return string
      * @throws CannotAccessAwsException
+     * @throws Exceptions\CannotPrepareAwsCognitoClient
      */
-    public function generate(string $email, string $password): string
+    public function createToken(): string
     {
-        return $this->cognito->createToken($email, $password);
+        $cognito = Cognito::getInstance();
+
+        return $cognito->createToken();
     }
 }

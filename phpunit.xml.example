@@ -5,9 +5,11 @@
         </testsuite>
     </testsuites>
     <php>
+        <env name="AWS_ACCESS_KEY_ID" value="" force="true" />
+        <env name="AWS_SECRET_ACCESS_KEY" value="" force="true" />
         <env name="COGNITO_POOL_ID" value="YOUR-VALUE" force="true" />
         <env name="COGNITO_APP_CLIENT_ID" value="YOUR-VALUE" force="true" />
-        <env name="AUTH_USER_EMAIL" value="YOUR-VALUE" force="true" />
-        <env name="AUTH_USER_PASSWORD" value="YOUR-VALUE" force="true" />
+        <env name="SYSTEM_USER_EMAIL" value="YOUR-VALUE" force="true" />
+        <env name="SYSTEM_USER_PASSWORD" value="YOUR-VALUE" force="true" />
     </php>
 </phpunit>

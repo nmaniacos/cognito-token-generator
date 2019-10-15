@@ -2,7 +2,6 @@
 
 use CTG\CognitoTokenGenerator;
 use PHPUnit\Framework\TestCase;
-use CTG\Exceptions\CannotAccessAwsException;
 
 /**
  * Class TestCognitoTokenGenerator
@@ -26,20 +25,9 @@ final class TestCognitoTokenGenerator extends TestCase
         };
     }
 
-    public function testExceptionForInvalidEmailAndPassword(): void
+    public function testCanCreateTokenForCorrectEnvironmentVariables(): void
     {
-        $this->expectException(CannotAccessAwsException::class);
-        $this->cognitoTokenGeneratorMock->generate('random-email', 'random-password');
-    }
-
-    public function testTokenForCorrectEmailAndPassword(): void
-    {
-        $this->assertNotEmpty(
-            $this->cognitoTokenGeneratorMock->generate(
-                getenv('AUTH_USER_EMAIL'),
-                getenv('AUTH_USER_PASSWORD')
-            )
-        );
+        $this->assertNotEmpty($this->cognitoTokenGeneratorMock->createToken());
     }
 }
 

@@ -3,6 +3,7 @@
 namespace CTG\Services;
 
 use CTG\Exceptions\CannotAccessAwsException;
+use CTG\Exceptions\CannotPrepareAwsCognitoClient;
 use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use Aws\CognitoIdentityProvider\Exception\CognitoIdentityProviderException;
 
@@ -31,25 +32,45 @@ class Cognito
     private $clientId;
 
     /**
+     * @var string
+     */
+    private $email;
+
+    /**
+     * @var string
+     */
+    private $password;
+
+    /**
      * @var Cognito
      */
     private static $instance = null;
 
     /**
      * Cognito constructor.
+     *
+     * @throws CannotPrepareAwsCognitoClient
      */
     public function __construct()
     {
-        $this->client = $this->prepareCognitoClient();
         $this->poolId = getenv('COGNITO_POOL_ID');
         $this->clientId = getenv('COGNITO_APP_CLIENT_ID');
+        $this->email = getenv('SYSTEM_USER_EMAIL');
+        $this->password = getenv('SYSTEM_USER_PASSWORD');
+
+        $this->client = $this->prepareCognitoClient();
     }
 
     /**
      * @return CognitoIdentityProviderClient
+     * @throws CannotPrepareAwsCognitoClient
      */
     private function prepareCognitoClient()
     {
+        if (empty($this->poolId) || empty($this->clientId) || empty(getenv('AWS_ACCESS_KEY_ID')) || empty(getenv('AWS_SECRET_ACCESS_KEY'))) {
+            throw new CannotPrepareAwsCognitoClient('Some envariable variables are missing: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or Cognito Pool credentials');
+        }
+
         return new CognitoIdentityProviderClient([
             'region' => 'eu-central-1',
             'version' => '2016-04-18',
@@ -57,12 +78,10 @@ class Cognito
     }
 
     /**
-     * @param string $email
-     * @param string $password
      * @return string
      * @throws CannotAccessAwsException
      */
-    public function createToken($email, $password)
+    public function createToken()
     {
         try {
 
@@ -71,8 +90,8 @@ class Cognito
                 'UserPoolId' => (string) $this->poolId,
                 'ClientId' => (string) $this->clientId,
                 'AuthParameters' => [
-                    'USERNAME' => $email,
-                    'PASSWORD' => $password
+                    'USERNAME' => $this->email,
+                    'PASSWORD' => $this->password
                 ]
             ]);
 
@@ -89,6 +108,7 @@ class Cognito
 
     /**
      * @return Cognito
+     * @throws CannotPrepareAwsCognitoClient
      */
     public static function getInstance()
     {
