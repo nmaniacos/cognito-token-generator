@@ -21,5 +21,6 @@
     "psr-0": {
       "CTG": "src/"
     }
-  }
+  },
+  "license": "GPL-3.0-only"
 }
