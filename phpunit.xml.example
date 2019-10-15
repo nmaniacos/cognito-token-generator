@@ -1,0 +1,13 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="cognito-token-generator">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="COGNITO_POOL_ID" value="YOUR-VALUE" force="true" />
+        <env name="COGNITO_APP_CLIENT_ID" value="YOUR-VALUE" force="true" />
+        <env name="AUTH_USER_EMAIL" value="YOUR-VALUE" force="true" />
+        <env name="AUTH_USER_PASSWORD" value="YOUR-VALUE" force="true" />
+    </php>
+</phpunit>
