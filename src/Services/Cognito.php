@@ -67,8 +67,8 @@ class Cognito
      */
     private function prepareCognitoClient()
     {
-        if (empty($this->poolId) || empty($this->clientId) || empty(getenv('AWS_ACCESS_KEY_ID')) || empty(getenv('AWS_SECRET_ACCESS_KEY'))) {
-            throw new CannotPrepareAwsCognitoClient('Some envariable variables are missing: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or Cognito Pool credentials');
+        if (empty($this->poolId) || empty($this->clientId)) {
+            throw new CannotPrepareAwsCognitoClient('Some envariable variables are missing: Cognito-Pool credentials');
         }
 
         return new CognitoIdentityProviderClient([
